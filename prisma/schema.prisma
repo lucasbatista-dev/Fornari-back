@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Client {
+  id            String  @id
+  fullname      String  @db.VarChar(200)
+  email         String? @unique
+  cpf           String  @unique
+  cellphone     String?
+  cep           String?
+  state         String?
+  city          String?
+  street        String?
+  neighborhood  String?
+  addressNumber String?
+  complement    String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  pictures Picture[]
+
+  @@map("clients")
+}
+
+model Picture {
+  id       String  @id
+  url      String
+  Client   Client? @relation(fields: [clientId], references: [id])
+  clientId String?
+
+  @@map("pictures")
+}
